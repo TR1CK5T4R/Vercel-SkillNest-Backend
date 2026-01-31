@@ -12,16 +12,21 @@ const allowedOrigins = process.env.CORS_ORIGIN
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+
+        // Allow localhost for development
+        if (origin.includes('localhost')) {
+            return callback(null, true);
         }
+
+        // Allow all .vercel.app domains (production + previews)
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
-
-
 
 // app.use(cors({
 //     origin: process.env.CORS_ORIGIN || "http://localhost:5173",

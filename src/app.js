@@ -3,6 +3,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
+const app = express();
+
 const allowedOrigins = process.env.CORS_ORIGIN
     ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
     : ['http://localhost:5173'];
@@ -19,7 +21,7 @@ app.use(cors({
     credentials: true
 }));
 
-// const app = express();
+
 
 // app.use(cors({
 //     origin: process.env.CORS_ORIGIN || "http://localhost:5173",

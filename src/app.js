@@ -3,12 +3,33 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 
-const app = express();
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://vercel-skill-nest-frontend.vercel.app'
+];
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
-    credentials: true,
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps, Postman)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowed list
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true
 }));
+
+// const app = express();
+
+// app.use(cors({
+//     origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+//     credentials: true,
+// }));
 
 app.use(express.json({
     limit: "20kb"
